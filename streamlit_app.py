@@ -2,6 +2,7 @@
 import streamlit as st
 from snowflake.snowpark.functions import col
 import pandas
+import requests
 
 # Write directly to the app
 st.title(f"Customise Your Smoothie :cup_with_straw: {st.__version__}")
@@ -42,13 +43,13 @@ if ingredients_list:
         sf_df = st.dataframe(data=smoothiefroot_response.json(), use_container_width = True)
         
 
-    #st.write(ingredients_string)
+    st.write(ingredients_string)
 
 
     my_insert_stmt = """ insert into smoothies.public.orders(ingredients, NAME_ON_ORDER)
             values ('""" + ingredients_string + """','"""+name_on_order+"""' )"""
 
-    st.write(my_insert_stmt)
+    #st.write(my_insert_stmt)
     #st.stop()
   
     #st.write(my_insert_stmt)
@@ -58,6 +59,6 @@ if ingredients_list:
         session.sql(my_insert_stmt).collect()
         st.success('Your Smoothie is ordered!', icon="✅")
 
-import requests
+
 smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")
 sf_df = st.dataframe(data=smoothiefroot_response.json(), use_container_width=True)
